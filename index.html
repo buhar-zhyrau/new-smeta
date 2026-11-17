@@ -14,14 +14,15 @@
       <h1>Смета за 5 минут</h1>
       <p class="hint">Добавьте позиции и цены — итог посчитается автоматически.</p>
     </header>
+    <h1 id="print-title" class="print-only"></h1>
 
     <section class="card" aria-labelledby="details-title">
       <h2 id="details-title">Реквизиты</h2>
       <div class="details-grid">
-        <label>От кого<input id="sender" type="text" placeholder="Ваше имя или компания"></label>
-        <label>Для кого<input id="recipient" type="text" placeholder="Имя или компания клиента"></label>
-        <label>Номер сметы<input id="estimate-number" type="text" placeholder="Например, 001"></label>
-        <label>Дата<input id="estimate-date" type="date"></label>
+        <label>От кого<input id="sender" type="text" placeholder="Ваше имя или компания"><span class="print-only" data-print-for="sender"></span></label>
+        <label>Для кого<input id="recipient" type="text" placeholder="Имя или компания клиента"><span class="print-only" data-print-for="recipient"></span></label>
+        <label class="document-meta">Номер сметы<input id="estimate-number" type="text" placeholder="Например, 001"></label>
+        <label class="document-meta">Дата<input id="estimate-date" type="date"></label>
       </div>
     </section>
 
@@ -57,7 +58,14 @@
         <output id="grand-total" aria-live="polite" aria-atomic="true">0 ₸</output>
       </div>
     </section>
+    <section class="card comment-card" aria-labelledby="comment-title">
+      <h2 id="comment-title"><label for="comment">Комментарий</label></h2>
+      <textarea id="comment" rows="3" placeholder="Сроки, условия оплаты"></textarea>
+      <p class="print-only comment-value" data-print-for="comment"></p>
+    </section>
+    <p class="print-only signature">Подпись ____________________</p>
     <div class="estimate-actions">
+      <button id="save-pdf" class="primary-button" type="button">Сохранить PDF</button>
       <button id="copy-estimate" class="primary-button" type="button">Скопировать для WhatsApp</button>
       <button id="new-estimate" class="secondary-button" type="button">Новая смета</button>
       <span id="copy-status" role="status"></span>
@@ -72,10 +80,10 @@
 
   <template id="item-template">
     <tr class="item-row">
-      <td><label class="cell-label" data-label="name">Наименование</label><input data-field="name" type="text" placeholder="Товар или услуга"></td>
-      <td><label class="cell-label" data-label="quantity">Количество</label><input data-field="quantity" type="text" inputmode="decimal" placeholder="0" autocomplete="off"></td>
-      <td><label class="cell-label" data-label="unit">Единица</label><select data-field="unit"><option value="шт">шт</option><option value="час">час</option><option value="услуга">услуга</option></select></td>
-      <td><label class="cell-label" data-label="price">Цена, <span data-currency>₸</span></label><input data-field="price" type="text" inputmode="decimal" placeholder="0" autocomplete="off"></td>
+      <td><label class="cell-label" data-label="name">Наименование</label><input data-field="name" type="text" placeholder="Товар или услуга"><span class="print-only" data-print-field="name"></span></td>
+      <td><label class="cell-label" data-label="quantity">Количество</label><input data-field="quantity" type="text" inputmode="decimal" placeholder="0" autocomplete="off"><span class="print-only" data-print-field="quantity"></span></td>
+      <td><label class="cell-label" data-label="unit">Единица</label><select data-field="unit"><option value="шт">шт</option><option value="час">час</option><option value="услуга">услуга</option></select><span class="print-only" data-print-field="unit"></span></td>
+      <td><label class="cell-label" data-label="price">Цена, <span data-currency>₸</span></label><input data-field="price" type="text" inputmode="decimal" placeholder="0" autocomplete="off"><span class="print-only" data-print-field="price"></span></td>
       <td class="line-total-cell"><span class="mobile-label">Сумма</span><output data-field="total">0 ₸</output></td>
       <td class="remove-cell"><button class="remove-button" type="button" aria-label="Удалить позицию">✕</button></td>
     </tr>

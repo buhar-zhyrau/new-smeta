@@ -65,6 +65,10 @@ td input, td select { padding-left: 9px; padding-right: 9px; }
 .manual-copy { margin-top: 20px; }
 .manual-copy label { margin: 16px 0 8px; }
 textarea { display: block; width: 100%; min-width: 44px; min-height: 44px; padding: 12px; border: 1px solid var(--border); border-radius: 9px; font: inherit; line-height: 1.5; color: inherit; background: #fff; resize: vertical; }
+.print-only { display: none; }
+.comment-card { margin-top: 20px; }
+.comment-card h2 label { font: inherit; }
+.comment-card textarea { margin-top: 16px; }
 @media (min-width: 641px) and (max-width: 900px) {
   .page { padding: 32px 16px; }
   .card { padding: 20px 12px; }
@@ -95,4 +99,42 @@ textarea { display: block; width: 100%; min-width: 44px; min-height: 44px; paddi
   .total-card { padding: 24px 20px; }
   .total-payable { align-items: flex-start; flex-direction: column; gap: 10px; }
   .estimate-actions > button { width: 100%; }
+}
+
+@page { size: A4 portrait; margin: 15mm; }
+@media print {
+  :root, body { background: #fff; color: #000; }
+  body { font-size: 11pt; line-height: 1.4; }
+  .page { max-width: none; margin: 0; padding: 0; }
+  .page-header, button, .estimate-actions, .calculation-settings, .keyboard-hint,
+  .document-meta, .remove-cell, th:last-child, .cell-label, .mobile-label,
+  #manual-copy, #storage-status, input, select, textarea { display: none !important; }
+  .print-only { display: block; }
+  #print-title { margin: 0 0 8mm; font-size: 19pt; letter-spacing: normal; }
+  h2, .total-card h2 { font-size: 12pt; }
+  h1, h2 { break-after: avoid; }
+  .card { padding: 0; margin: 0 0 6mm; border: 0; border-radius: 0; box-shadow: none; }
+  .details-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5mm; margin-top: 3mm; }
+  .details-grid label { font-size: 10pt; }
+  [data-print-for] { font-weight: 400; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .details-grid [data-print-for] { margin-top: 1mm; }
+  .section-heading { display: block; margin-bottom: 3mm; }
+  table { display: table; width: 100%; border-collapse: collapse; font-size: 10pt; }
+  thead { display: table-header-group; }
+  tbody { display: table-row-group; }
+  .item-row { display: table-row; border: 0; }
+  th, td { display: table-cell; border: 1px solid #555; padding: 2mm; vertical-align: top; color: #000; overflow-wrap: anywhere; }
+  th:first-child { width: 38%; }
+  th:nth-child(2), th:nth-child(3) { width: 12%; }
+  th:nth-child(4) { width: 18%; }
+  th:nth-child(5) { width: 20%; }
+  .line-total-cell { text-align: right; }
+  tr { break-inside: avoid; }
+  .total-card { width: 95mm; max-width: 100%; margin: 0 0 6mm auto; padding: 0; background: #fff; color: #000; border-radius: 0; break-inside: avoid; }
+  .totals-breakdown { margin: 0 0 3mm; }
+  .summary-row { margin-top: 2mm; gap: 4mm; }
+  .total-payable { flex-direction: row; align-items: baseline; gap: 4mm; padding-top: 3mm; border-top: 1px solid #555; }
+  #grand-total { font-size: 16pt; letter-spacing: normal; }
+  .comment-value { margin: 3mm 0 0; }
+  .signature { margin: 8mm 0 0; break-inside: avoid; }
 }

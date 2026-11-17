@@ -8,7 +8,7 @@ const discountInput = document.querySelector("#discount-percent");
 const vatInput = document.querySelector("#vat-percent");
 const currencySelect = document.querySelector("#currency");
 const draftKey = "smeta-draft-v1";
-const fieldIds = ["sender", "recipient", "estimate-number", "estimate-date", "discount-percent", "vat-percent", "currency"];
+const fieldIds = ["sender", "recipient", "estimate-number", "estimate-date", "discount-percent", "vat-percent", "currency", "comment"];
 const itemFields = ["name", "quantity", "unit", "price"];
 const copyStatus = document.querySelector("#copy-status");
 const manualCopy = document.querySelector("#manual-copy");
@@ -132,10 +132,11 @@ function restoreDraft() {
     if (saved === null) return false;
     const draft = JSON.parse(saved);
     if (!draft || draft.version !== 1 || !draft.fields || !Array.isArray(draft.items)) return false;
-    if (!fieldIds.every(id => typeof draft.fields[id] === "string")) return false;
+    // Drafts saved before the comment field was added remain compatible.
+    if (!fieldIds.every(id => typeof draft.fields[id] === "string" || (id === "comment" && draft.fields[id] === undefined))) return false;
     if (!draft.items.every(row => row && itemFields.every(field => typeof row[field] === "string") && ["шт", "час", "услуга"].includes(row.unit))) return false;
     if (!["₸", "₽", "$", "€"].includes(draft.fields.currency)) return false;
-    for (const id of fieldIds) document.getElementById(id).value = draft.fields[id];
+    for (const id of fieldIds) document.getElementById(id).value = draft.fields[id] ?? "";
     for (const row of draft.items) addItem(false, row);
     return true;
   } catch {
@@ -215,7 +216,29 @@ document.querySelector("#copy-estimate").addEventListener("click", async () => {
   }
 });
 
-for (const id of ["sender", "recipient", "estimate-number", "estimate-date"]) {
+function preparePrint() {
+  recalculate();
+  const number = document.querySelector("#estimate-number").value.trim() || "—";
+  const date = document.querySelector("#estimate-date").value;
+  document.querySelector("#print-title").textContent = `Смета № ${number} от ${date ? date.split("-").reverse().join(".") : "—"}`;
+  for (const output of document.querySelectorAll("[data-print-for]")) {
+    output.textContent = document.getElementById(output.dataset.printFor).value;
+  }
+  // Text copies wrap naturally on paper, including long names and comments.
+  for (const row of items.querySelectorAll(".item-row")) {
+    for (const field of itemFields) {
+      row.querySelector(`[data-print-field="${field}"]`).textContent = row.querySelector(`[data-field="${field}"]`).value;
+    }
+  }
+}
+
+document.querySelector("#save-pdf").addEventListener("click", () => {
+  preparePrint();
+  window.print();
+});
+window.addEventListener("beforeprint", preparePrint);
+
+for (const id of ["sender", "recipient", "estimate-number", "estimate-date", "comment"]) {
   document.getElementById(id).addEventListener("input", saveDraft);
   document.getElementById(id).addEventListener("change", saveDraft);
 }
