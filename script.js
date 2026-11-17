@@ -1,5 +1,101 @@
 "use strict";
 
+const translations = {
+  ru: {
+    language: "Язык", eyebrow: "ПРОСТОЙ РАСЧЁТ", appTitle: "Смета за 5 минут",
+    hint: "Добавьте позиции и цены — итог посчитается автоматически.", details: "Реквизиты",
+    sender: "От кого", recipient: "Для кого", number: "Номер сметы", date: "Дата",
+    senderPlaceholder: "Ваше имя или компания", recipientPlaceholder: "Имя или компания клиента", numberPlaceholder: "Например, 001",
+    positions: "Позиции", keyboardHint: "Enter в последней строке — новая позиция",
+    tableCaption: "Позиции сметы с автоматическим расчётом суммы", name: "Наименование", quantity: "Количество", unit: "Единица",
+    priceLabel: "Цена,", sum: "Сумма", remove: "Удаление", removeItem: "Удалить позицию",
+    add: "+ Добавить позицию", discountLabel: "Скидка, %", vatLabel: "НДС, %", currency: "Валюта",
+    discount: "Скидка", discounted: "Сумма со скидкой", vat: "НДС", total: "Итого к оплате",
+    comment: "Комментарий", commentPlaceholder: "Сроки, условия оплаты", signature: "Подпись",
+    pdf: "Сохранить PDF", copy: "Скопировать для WhatsApp", newEstimate: "Новая смета",
+    manualCopy: "Скопируйте текст вручную", estimateText: "Текст сметы", itemPlaceholder: "Товар или услуга",
+    pieces: "шт", hour: "час", service: "услуга", unnamed: "Без названия", copied: "Скопировано ✓",
+    confirmNew: "Создать новую смету? Текущий черновик будет очищен.",
+    storageError: "Не удалось сохранить черновик в браузере. Скопируйте смету перед закрытием страницы.",
+    documentTitle: "Смета № {number} от {date}"
+  },
+  kk: {
+    language: "Тіл", eyebrow: "ОҢАЙ ЕСЕПТЕУ", appTitle: "5 минутта смета",
+    hint: "Позициялар мен бағаларды қосыңыз — жалпы сома автоматты түрде есептеледі.", details: "Деректемелер",
+    sender: "Кімнен", recipient: "Кімге", number: "Смета нөмірі", date: "Күні",
+    senderPlaceholder: "Атыңыз немесе компанияңыз", recipientPlaceholder: "Клиенттің аты немесе компаниясы", numberPlaceholder: "Мысалы, 001",
+    positions: "Позициялар", keyboardHint: "Соңғы жолда Enter бассаңыз, жаңа позиция қосылады",
+    tableCaption: "Сомасы автоматты түрде есептелетін смета позициялары", name: "Атауы", quantity: "Саны", unit: "Өлшем бірлігі",
+    priceLabel: "Бағасы,", sum: "Сома", remove: "Жою", removeItem: "Позицияны жою",
+    add: "+ Позиция қосу", discountLabel: "Жеңілдік, %", vatLabel: "ҚҚС, %", currency: "Валюта",
+    discount: "Жеңілдік", discounted: "Жеңілдіктен кейінгі сома", vat: "ҚҚС", total: "Төлеуге барлығы",
+    comment: "Түсініктеме", commentPlaceholder: "Мерзімдер, төлем шарттары", signature: "Қолы",
+    pdf: "PDF сақтау", copy: "WhatsApp үшін көшіру", newEstimate: "Жаңа смета",
+    manualCopy: "Мәтінді қолмен көшіріңіз", estimateText: "Смета мәтіні", itemPlaceholder: "Тауар немесе қызмет",
+    pieces: "дана", hour: "сағат", service: "қызмет", unnamed: "Атаусыз", copied: "Көшірілді ✓",
+    confirmNew: "Жаңа смета жасау керек пе? Ағымдағы жоба тазартылады.",
+    storageError: "Жобаны браузерде сақтау мүмкін болмады. Бетті жаппас бұрын сметаны көшіріңіз.",
+    documentTitle: "{date} күнгі № {number} смета"
+  },
+  en: {
+    language: "Language", eyebrow: "SIMPLE CALCULATIONS", appTitle: "Estimate in 5 minutes",
+    hint: "Add items and prices — the total is calculated automatically.", details: "Details",
+    sender: "From", recipient: "To", number: "Estimate number", date: "Date",
+    senderPlaceholder: "Your name or company", recipientPlaceholder: "Client name or company", numberPlaceholder: "For example, 001",
+    positions: "Items", keyboardHint: "Press Enter in the last row to add an item",
+    tableCaption: "Estimate items with automatically calculated amounts", name: "Description", quantity: "Quantity", unit: "Unit",
+    priceLabel: "Price,", sum: "Subtotal", remove: "Remove", removeItem: "Remove item",
+    add: "+ Add item", discountLabel: "Discount, %", vatLabel: "VAT, %", currency: "Currency",
+    discount: "Discount", discounted: "Subtotal after discount", vat: "VAT", total: "Total due",
+    comment: "Comment", commentPlaceholder: "Timeframe, payment terms", signature: "Signature",
+    pdf: "Save PDF", copy: "Copy for WhatsApp", newEstimate: "New estimate",
+    manualCopy: "Copy the text manually", estimateText: "Estimate text", itemPlaceholder: "Product or service",
+    pieces: "pcs", hour: "hr", service: "service", unnamed: "Untitled", copied: "Copied ✓",
+    confirmNew: "Create a new estimate? The current draft will be cleared.",
+    storageError: "Could not save the draft in this browser. Copy the estimate before closing the page.",
+    documentTitle: "Estimate No. {number} dated {date}"
+  }
+};
+const languageKey = "smeta-language-v1";
+let language = "ru";
+try {
+  const savedLanguage = localStorage.getItem(languageKey);
+  if (Object.hasOwn(translations, savedLanguage)) language = savedLanguage;
+} catch { /* The estimate still works when browser storage is unavailable. */ }
+
+function t(key) {
+  return translations[language][key];
+}
+
+function translateElements(root) {
+  for (const element of root.querySelectorAll("[data-i18n]")) element.textContent = t(element.dataset.i18n);
+  for (const element of root.querySelectorAll("[data-i18n-placeholder]")) element.placeholder = t(element.dataset.i18nPlaceholder);
+}
+
+function unitText(value) {
+  return t({ "шт": "pieces", "час": "hour", "услуга": "service" }[value]);
+}
+
+function documentHeading() {
+  const number = document.querySelector("#estimate-number").value.trim() || "—";
+  const date = document.querySelector("#estimate-date").value;
+  const formattedDate = date ? date.split("-").reverse().join(".") : "—";
+  return t("documentTitle").replace(/\{number\}|\{date\}/g, token => token === "{number}" ? number : formattedDate);
+}
+
+function applyLanguage() {
+  document.documentElement.lang = language;
+  document.title = t("appTitle");
+  document.querySelector("#language").value = language;
+  translateElements(document);
+  for (const row of items.querySelectorAll(".item-row")) {
+    row.querySelector(".remove-button").setAttribute("aria-label", `${t("removeItem")} ${row.dataset.itemId}`);
+  }
+  if (copyStatus.textContent) copyStatus.textContent = t("copied");
+  if (!document.querySelector("#storage-status").hidden) document.querySelector("#storage-status").textContent = t("storageError");
+  if (!manualCopy.hidden) copyText.value = estimateText();
+}
+
 const items = document.querySelector("#items");
 const template = document.querySelector("#item-template");
 const addButton = document.querySelector("#add-item");
@@ -67,12 +163,14 @@ function recalculate() {
 function addItem(focus = true, values = {}) {
   const row = template.content.firstElementChild.cloneNode(true);
   const itemId = nextItemId++;
+  row.dataset.itemId = itemId;
+  translateElements(row);
   for (const field of row.querySelectorAll("input, select")) {
     field.id = `item-${itemId}-${field.dataset.field}`;
     row.querySelector(`[data-label="${field.dataset.field}"]`).htmlFor = field.id;
     if (typeof values[field.dataset.field] === "string") field.value = values[field.dataset.field];
   }
-  row.querySelector(".remove-button").setAttribute("aria-label", `Удалить позицию ${itemId}`);
+  row.querySelector(".remove-button").setAttribute("aria-label", `${t("removeItem")} ${itemId}`);
   items.append(row);
   recalculate();
   if (focus) row.querySelector('[data-field="name"]').focus();
@@ -121,7 +219,7 @@ function saveDraft() {
     localStorage.setItem(draftKey, JSON.stringify({ version: 1, fields, items: positions }));
     status.hidden = true;
   } catch {
-    status.textContent = "Не удалось сохранить черновик в браузере. Скопируйте смету перед закрытием страницы.";
+    status.textContent = t("storageError");
     status.hidden = false;
   }
 }
@@ -151,7 +249,7 @@ function nextEstimateNumber(value) {
 }
 
 document.querySelector("#new-estimate").addEventListener("click", () => {
-  if (!window.confirm("Создать новую смету? Текущий черновик будет очищен.")) return;
+  if (!window.confirm(t("confirmNew"))) return;
   const number = nextEstimateNumber(document.querySelector("#estimate-number").value);
   restoringDraft = true;
   for (const id of fieldIds) document.getElementById(id).value = "";
@@ -173,28 +271,25 @@ document.querySelector("#new-estimate").addEventListener("click", () => {
 });
 
 function estimateText() {
-  const number = document.querySelector("#estimate-number").value.trim();
-  const date = document.querySelector("#estimate-date").value;
-  const formattedDate = date ? date.split("-").reverse().join(".") : "—";
-  const lines = [`Смета № ${number || "—"} от ${formattedDate}`];
-  for (const [id, label] of [["sender", "От кого"], ["recipient", "Для кого"]]) {
+  const lines = [documentHeading()];
+  for (const id of ["sender", "recipient"]) {
     const value = document.getElementById(id).value.trim();
-    if (value) lines.push(`${label}: ${value}`);
+    if (value) lines.push(`${t(id)}: ${value}`);
   }
   lines.push("");
   for (const row of items.querySelectorAll(".item-row")) {
     const read = field => row.querySelector(`[data-field="${field}"]`).value;
     if (![read("name"), read("quantity"), read("price")].some(value => value.trim())) continue;
     const quantity = new Intl.NumberFormat("ru-RU", { maximumFractionDigits: 20 }).format(parseNumber(read("quantity"))).replace(/[\u00a0\u202f]/g, " ");
-    lines.push(`• ${read("name").trim() || "Без названия"} — ${quantity} ${read("unit")} × ${formatMoney(parseNumber(read("price")))} = ${row.querySelector('[data-field="total"]').textContent}`);
+    lines.push(`• ${read("name").trim() || t("unnamed")} — ${quantity} ${unitText(read("unit"))} × ${formatMoney(parseNumber(read("price")))} = ${row.querySelector('[data-field="total"]').textContent}`);
   }
-  lines.push("", `Сумма: ${document.querySelector("#subtotal").textContent}`);
+  lines.push("", `${t("sum")}: ${document.querySelector("#subtotal").textContent}`);
   if (!document.querySelector("#discount-row").hidden) {
-    lines.push(`Скидка (${discountInput.value.trim()} %): ${document.querySelector("#discount-amount").textContent}`);
-    lines.push(`Сумма со скидкой: ${document.querySelector("#discounted-subtotal").textContent}`);
+    lines.push(`${t("discount")} (${discountInput.value.trim()} %): ${document.querySelector("#discount-amount").textContent}`);
+    lines.push(`${t("discounted")}: ${document.querySelector("#discounted-subtotal").textContent}`);
   }
-  if (!document.querySelector("#vat-row").hidden) lines.push(`НДС (${vatInput.value.trim()} %): ${document.querySelector("#vat-amount").textContent}`);
-  lines.push(`Итого к оплате: ${grandTotal.textContent}`);
+  if (!document.querySelector("#vat-row").hidden) lines.push(`${t("vat")} (${vatInput.value.trim()} %): ${document.querySelector("#vat-amount").textContent}`);
+  lines.push(`${t("total")}: ${grandTotal.textContent}`);
   return lines.join("\n");
 }
 
@@ -206,7 +301,7 @@ document.querySelector("#copy-estimate").addEventListener("click", async () => {
   manualCopy.hidden = true;
   try {
     await navigator.clipboard.writeText(text);
-    copyStatus.textContent = "Скопировано ✓";
+    copyStatus.textContent = t("copied");
     copyTimer = setTimeout(() => { copyStatus.textContent = ""; }, 2000);
   } catch {
     copyText.value = text;
@@ -218,16 +313,15 @@ document.querySelector("#copy-estimate").addEventListener("click", async () => {
 
 function preparePrint() {
   recalculate();
-  const number = document.querySelector("#estimate-number").value.trim() || "—";
-  const date = document.querySelector("#estimate-date").value;
-  document.querySelector("#print-title").textContent = `Смета № ${number} от ${date ? date.split("-").reverse().join(".") : "—"}`;
+  document.querySelector("#print-title").textContent = documentHeading();
   for (const output of document.querySelectorAll("[data-print-for]")) {
     output.textContent = document.getElementById(output.dataset.printFor).value;
   }
   // Text copies wrap naturally on paper, including long names and comments.
   for (const row of items.querySelectorAll(".item-row")) {
     for (const field of itemFields) {
-      row.querySelector(`[data-print-field="${field}"]`).textContent = row.querySelector(`[data-field="${field}"]`).value;
+      const value = row.querySelector(`[data-field="${field}"]`).value;
+      row.querySelector(`[data-print-field="${field}"]`).textContent = field === "unit" ? unitText(value) : value;
     }
   }
 }
@@ -238,6 +332,14 @@ document.querySelector("#save-pdf").addEventListener("click", () => {
 });
 window.addEventListener("beforeprint", preparePrint);
 
+document.querySelector("#language").addEventListener("change", (event) => {
+  const selected = event.target.value;
+  if (!Object.hasOwn(translations, selected)) return;
+  language = selected;
+  applyLanguage();
+  try { localStorage.setItem(languageKey, language); } catch { /* Keep the selection for this session. */ }
+});
+
 for (const id of ["sender", "recipient", "estimate-number", "estimate-date", "comment"]) {
   document.getElementById(id).addEventListener("input", saveDraft);
   document.getElementById(id).addEventListener("change", saveDraft);
@@ -247,3 +349,4 @@ document.querySelector("#estimate-date").value = todayDate();
 if (!restoreDraft()) addItem(false);
 restoringDraft = false;
 recalculate();
+applyLanguage();

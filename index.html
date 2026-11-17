@@ -9,82 +9,90 @@
 </head>
 <body>
   <main class="page">
+    <div class="language-bar">
+      <label for="language"><span data-i18n="language">Язык</span></label>
+      <select id="language">
+        <option value="kk" lang="kk">Қазақша</option>
+        <option value="ru" lang="ru" selected>Русский</option>
+        <option value="en" lang="en">English</option>
+      </select>
+    </div>
     <header class="page-header">
-      <p class="eyebrow">ПРОСТОЙ РАСЧЁТ</p>
-      <h1>Смета за 5 минут</h1>
-      <p class="hint">Добавьте позиции и цены — итог посчитается автоматически.</p>
+      <p class="eyebrow" data-i18n="eyebrow">ПРОСТОЙ РАСЧЁТ</p>
+      <h1 data-i18n="appTitle">Смета за 5 минут</h1>
+      <p class="hint" data-i18n="hint">Добавьте позиции и цены — итог посчитается автоматически.</p>
     </header>
     <h1 id="print-title" class="print-only"></h1>
 
     <section class="card" aria-labelledby="details-title">
-      <h2 id="details-title">Реквизиты</h2>
+      <h2 id="details-title" data-i18n="details">Реквизиты</h2>
       <div class="details-grid">
-        <label>От кого<input id="sender" type="text" placeholder="Ваше имя или компания"><span class="print-only" data-print-for="sender"></span></label>
-        <label>Для кого<input id="recipient" type="text" placeholder="Имя или компания клиента"><span class="print-only" data-print-for="recipient"></span></label>
-        <label class="document-meta">Номер сметы<input id="estimate-number" type="text" placeholder="Например, 001"></label>
-        <label class="document-meta">Дата<input id="estimate-date" type="date"></label>
+        <label><span data-i18n="sender">От кого</span><input id="sender" type="text" placeholder="Ваше имя или компания" data-i18n-placeholder="senderPlaceholder"><span class="print-only" data-print-for="sender"></span></label>
+        <label><span data-i18n="recipient">Для кого</span><input id="recipient" type="text" placeholder="Имя или компания клиента" data-i18n-placeholder="recipientPlaceholder"><span class="print-only" data-print-for="recipient"></span></label>
+        <label class="document-meta"><span data-i18n="number">Номер сметы</span><input id="estimate-number" type="text" placeholder="Например, 001" data-i18n-placeholder="numberPlaceholder"></label>
+        <label class="document-meta"><span data-i18n="date">Дата</span><input id="estimate-date" type="date"></label>
       </div>
     </section>
 
     <section class="card positions" aria-labelledby="positions-title">
       <div class="section-heading">
-        <h2 id="positions-title">Позиции</h2>
-        <p class="hint keyboard-hint">Enter в последней строке — новая позиция</p>
+        <h2 id="positions-title" data-i18n="positions">Позиции</h2>
+        <p class="hint keyboard-hint" data-i18n="keyboardHint">Enter в последней строке — новая позиция</p>
       </div>
       <table>
-        <caption class="visually-hidden">Позиции сметы с автоматическим расчётом суммы</caption>
+        <caption class="visually-hidden" data-i18n="tableCaption">Позиции сметы с автоматическим расчётом суммы</caption>
         <thead>
-          <tr><th scope="col">Наименование</th><th scope="col">Количество</th><th scope="col">Единица</th><th scope="col">Цена, <span data-currency>₸</span></th><th scope="col" class="amount-heading">Сумма</th><th scope="col"><span class="visually-hidden">Удаление</span></th></tr>
+          <tr><th scope="col" data-i18n="name">Наименование</th><th scope="col" data-i18n="quantity">Количество</th><th scope="col" data-i18n="unit">Единица</th><th scope="col"><span data-i18n="priceLabel">Цена,</span> <span data-currency>₸</span></th><th scope="col" class="amount-heading" data-i18n="sum">Сумма</th><th scope="col"><span class="visually-hidden" data-i18n="remove">Удаление</span></th></tr>
         </thead>
         <tbody id="items"></tbody>
       </table>
-      <button id="add-item" class="add-button" type="button">+ Добавить позицию</button>
+      <button id="add-item" class="add-button" type="button" data-i18n="add">+ Добавить позицию</button>
       <div class="calculation-settings">
-        <label>Скидка, %<input id="discount-percent" type="text" inputmode="decimal" value="0" autocomplete="off"></label>
-        <label>НДС, %<input id="vat-percent" type="text" inputmode="decimal" value="0" autocomplete="off"></label>
-        <label>Валюта<select id="currency"><option value="₸">₸</option><option value="₽">₽</option><option value="$">$</option><option value="€">€</option></select></label>
+        <label><span data-i18n="discountLabel">Скидка, %</span><input id="discount-percent" type="text" inputmode="decimal" value="0" autocomplete="off"></label>
+        <label><span data-i18n="vatLabel">НДС, %</span><input id="vat-percent" type="text" inputmode="decimal" value="0" autocomplete="off"></label>
+        <label><span data-i18n="currency">Валюта</span><select id="currency"><option value="₸">₸</option><option value="₽">₽</option><option value="$">$</option><option value="€">€</option></select></label>
       </div>
     </section>
 
     <section class="total-card" aria-labelledby="total-title">
       <dl class="totals-breakdown" aria-live="polite" aria-atomic="true">
-        <div class="summary-row"><dt>Сумма</dt><dd id="subtotal">0 ₸</dd></div>
-        <div id="discount-row" class="summary-row" hidden><dt>Скидка</dt><dd id="discount-amount">0 ₸</dd></div>
-        <div id="discounted-row" class="summary-row" hidden><dt>Сумма со скидкой</dt><dd id="discounted-subtotal">0 ₸</dd></div>
-        <div id="vat-row" class="summary-row" hidden><dt>НДС</dt><dd id="vat-amount">0 ₸</dd></div>
+        <div class="summary-row"><dt data-i18n="sum">Сумма</dt><dd id="subtotal">0 ₸</dd></div>
+        <div id="discount-row" class="summary-row" hidden><dt data-i18n="discount">Скидка</dt><dd id="discount-amount">0 ₸</dd></div>
+        <div id="discounted-row" class="summary-row" hidden><dt data-i18n="discounted">Сумма со скидкой</dt><dd id="discounted-subtotal">0 ₸</dd></div>
+        <div id="vat-row" class="summary-row" hidden><dt data-i18n="vat">НДС</dt><dd id="vat-amount">0 ₸</dd></div>
       </dl>
       <div class="total-payable">
-        <h2 id="total-title">Итого к оплате</h2>
+        <h2 id="total-title" data-i18n="total">Итого к оплате</h2>
         <output id="grand-total" aria-live="polite" aria-atomic="true">0 ₸</output>
       </div>
     </section>
     <section class="card comment-card" aria-labelledby="comment-title">
-      <h2 id="comment-title"><label for="comment">Комментарий</label></h2>
-      <textarea id="comment" rows="3" placeholder="Сроки, условия оплаты"></textarea>
+      <h2 id="comment-title"><label for="comment" data-i18n="comment">Комментарий</label></h2>
+      <textarea id="comment" rows="3" placeholder="Сроки, условия оплаты" data-i18n-placeholder="commentPlaceholder"></textarea>
       <p class="print-only comment-value" data-print-for="comment"></p>
     </section>
-    <p class="print-only signature">Подпись ____________________</p>
+    <p class="print-only signature"><span data-i18n="signature">Подпись</span> ____________________</p>
     <div class="estimate-actions">
-      <button id="save-pdf" class="primary-button" type="button">Сохранить PDF</button>
-      <button id="copy-estimate" class="primary-button" type="button">Скопировать для WhatsApp</button>
-      <button id="new-estimate" class="secondary-button" type="button">Новая смета</button>
+      <button id="save-pdf" class="primary-button" type="button" data-i18n="pdf">Сохранить PDF</button>
+      <button id="copy-estimate" class="primary-button" type="button" data-i18n="copy">Скопировать для WhatsApp</button>
+      <button id="new-estimate" class="secondary-button" type="button" data-i18n="newEstimate">Новая смета</button>
       <span id="copy-status" role="status"></span>
     </div>
     <p id="storage-status" class="hint" role="status" hidden></p>
     <section id="manual-copy" class="card manual-copy" aria-labelledby="manual-copy-title" hidden>
-      <h2 id="manual-copy-title">Скопируйте текст вручную</h2>
-      <label for="copy-text">Текст сметы</label>
+      <h2 id="manual-copy-title" data-i18n="manualCopy">Скопируйте текст вручную</h2>
+      <label for="copy-text" data-i18n="estimateText">Текст сметы</label>
       <textarea id="copy-text" rows="10" readonly></textarea>
     </section>
   </main>
 
   <template id="item-template">
     <tr class="item-row">
-      <td><label class="cell-label" data-label="name">Наименование</label><input data-field="name" type="text" placeholder="Товар или услуга"><span class="print-only" data-print-field="name"></span></td>
-      <td><label class="cell-label" data-label="quantity">Количество</label><input data-field="quantity" type="text" inputmode="decimal" placeholder="0" autocomplete="off"><span class="print-only" data-print-field="quantity"></span></td>
-      <td><label class="cell-label" data-label="unit">Единица</label><select data-field="unit"><option value="шт">шт</option><option value="час">час</option><option value="услуга">услуга</option></select><span class="print-only" data-print-field="unit"></span></td>
-      <td><label class="cell-label" data-label="price">Цена, <span data-currency>₸</span></label><input data-field="price" type="text" inputmode="decimal" placeholder="0" autocomplete="off"><span class="print-only" data-print-field="price"></span></td>
-      <td class="line-total-cell"><span class="mobile-label">Сумма</span><output data-field="total">0 ₸</output></td>
+      <td><label class="cell-label" data-label="name" data-i18n="name">Наименование</label><input data-field="name" type="text" placeholder="Товар или услуга" data-i18n-placeholder="itemPlaceholder"><span class="print-only" data-print-field="name"></span></td>
+      <td><label class="cell-label" data-label="quantity" data-i18n="quantity">Количество</label><input data-field="quantity" type="text" inputmode="decimal" placeholder="0" autocomplete="off"><span class="print-only" data-print-field="quantity"></span></td>
+      <td><label class="cell-label" data-label="unit" data-i18n="unit">Единица</label><select data-field="unit"><option value="шт" data-i18n="pieces">шт</option><option value="час" data-i18n="hour">час</option><option value="услуга" data-i18n="service">услуга</option></select><span class="print-only" data-print-field="unit"></span></td>
+      <td><label class="cell-label" data-label="price"><span data-i18n="priceLabel">Цена,</span> <span data-currency>₸</span></label><input data-field="price" type="text" inputmode="decimal" placeholder="0" autocomplete="off"><span class="print-only" data-print-field="price"></span></td>
+      <td class="line-total-cell"><span class="mobile-label" data-i18n="sum">Сумма</span><output data-field="total">0 ₸</output></td>
       <td class="remove-cell"><button class="remove-button" type="button" aria-label="Удалить позицию">✕</button></td>
     </tr>
   </template>
