@@ -57,6 +57,17 @@
         <output id="grand-total" aria-live="polite" aria-atomic="true">0 ₸</output>
       </div>
     </section>
+    <div class="estimate-actions">
+      <button id="copy-estimate" class="primary-button" type="button">Скопировать для WhatsApp</button>
+      <button id="new-estimate" class="secondary-button" type="button">Новая смета</button>
+      <span id="copy-status" role="status"></span>
+    </div>
+    <p id="storage-status" class="hint" role="status" hidden></p>
+    <section id="manual-copy" class="card manual-copy" aria-labelledby="manual-copy-title" hidden>
+      <h2 id="manual-copy-title">Скопируйте текст вручную</h2>
+      <label for="copy-text">Текст сметы</label>
+      <textarea id="copy-text" rows="10" readonly></textarea>
+    </section>
   </main>
 
   <template id="item-template">
