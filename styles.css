@@ -1,0 +1,77 @@
+:root {
+  color-scheme: light;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: #202a38;
+  background: #f4f6fa;
+  --accent: #365bd6;
+  --border: #dce2eb;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+.page { max-width: 1160px; margin: 0 auto; padding: 48px 24px 64px; }
+.page-header { margin-bottom: 32px; }
+.eyebrow { color: var(--accent); font-size: 12px; font-weight: 750; letter-spacing: .14em; margin: 0 0 12px; }
+h1 { margin: 0 0 12px; font-size: clamp(28px, 4vw, 42px); line-height: 1.2; letter-spacing: -.035em; }
+h2 { font-size: 20px; margin: 0; }
+.hint { color: #606d80; line-height: 1.5; margin: 0; }
+.card { background: #fff; border: 1px solid #e5e9f0; border-radius: 18px; padding: 28px; margin-bottom: 20px; }
+.details-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 24px; margin-top: 24px; }
+label { display: block; font-size: 14px; font-weight: 600; }
+input, select, button { font: inherit; min-height: 46px; min-width: 44px; }
+input, select { width: 100%; border: 1px solid var(--border); border-radius: 9px; padding: 10px 12px; background: #fff; color: inherit; }
+.details-grid input { margin-top: 8px; }
+input::placeholder { color: #7c8798; opacity: 1; }
+button { cursor: pointer; border-radius: 9px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.keyboard-hint { font-size: 13px; }
+table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+th { color: #606d80; text-align: left; font-size: 12px; font-weight: 600; padding: 0 6px 12px; }
+th:first-child { width: 29%; }
+th:nth-child(2) { width: 14%; }
+th:nth-child(3) { width: 13%; }
+th:nth-child(4) { width: 18%; }
+th:nth-child(5) { width: 19%; }
+th:last-child { width: 7%; }
+td { padding: 12px 6px; border-top: 1px solid #edf0f5; }
+td input, td select { padding-left: 9px; padding-right: 9px; }
+.amount-heading, .line-total-cell { text-align: right; }
+.line-total-cell { font-weight: 650; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.remove-cell { text-align: right; }
+.remove-button { width: 44px; border: 1px solid transparent; background: transparent; color: #606d80; font-size: 19px; }
+.remove-button:hover { background: #eef1f7; color: #202a38; }
+.add-button { padding: 11px 18px; margin-top: 16px; border: 1px solid var(--accent); color: var(--accent); background: #fff; font-weight: 650; }
+.add-button:hover { background: #eef2ff; }
+.total-card { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 28px; border-radius: 18px; background: #e9eeff; color: #263f98; }
+.total-card h2 { font-size: 18px; }
+#grand-total { font-size: clamp(28px, 4vw, 38px); font-weight: 750; letter-spacing: -.03em; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; min-width: 0; }
+.visually-hidden, .cell-label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.mobile-label { display: none; }
+@media (min-width: 641px) and (max-width: 900px) {
+  .page { padding: 32px 16px; }
+  .card { padding: 20px 12px; }
+  .keyboard-hint { display: none; }
+  td, th { padding-left: 3px; padding-right: 3px; }
+  td input, td select { padding-left: 5px; padding-right: 5px; }
+  table { font-size: 14px; }
+}
+@media (max-width: 640px) {
+  .page { padding: 28px 16px 40px; }
+  .page-header { margin-bottom: 24px; }
+  .card { padding: 20px 16px; border-radius: 14px; }
+  .details-grid { grid-template-columns: 1fr; gap: 16px; margin-top: 20px; }
+  .section-heading { display: block; }
+  .keyboard-hint { margin-top: 8px; }
+  table, tbody { display: block; }
+  thead { display: none; }
+  .item-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px 12px; padding: 16px; margin-bottom: 14px; border: 1px solid var(--border); border-radius: 12px; }
+  td { display: block; padding: 0; border: 0; min-width: 0; }
+  td:first-child, td:nth-child(4) { grid-column: 1 / -1; }
+  .cell-label { position: static; width: auto; height: auto; margin: 0 0 7px; overflow: visible; clip-path: none; white-space: normal; }
+  .line-total-cell { text-align: left; align-self: center; }
+  .mobile-label { display: block; color: #606d80; font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .remove-cell { align-self: end; }
+  .remove-button { background: #f4f6fa; }
+  .add-button { width: 100%; margin-top: 2px; }
+  .total-card { padding: 24px 20px; align-items: flex-start; flex-direction: column; gap: 10px; }
+}
